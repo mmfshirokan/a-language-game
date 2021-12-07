@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 using static LanguageGame.Translator;
 
@@ -42,9 +42,11 @@ namespace LanguageGame.Tests
         }
 
         [TestCase("Quick - fast - run!", ExpectedResult = "Uickqay - astfay - unray!")]
-        [TestCase("   This is an example of Hog Latin.    As you can see, it’s silly, but lots of fun for children.", 
+        [TestCase(
+            "   This is an example of Hog Latin.    As you can see, it’s silly, but lots of fun for children.", 
             ExpectedResult = "   Isthay isyay anyay exampleyay ofyay Oghay Atinlay.    Asyay ouyay ancay eesay, it’syay illysay, utbay otslay ofyay unfay orfay ildrenchay.")]
-        [TestCase("Pig Latin is not really a proper language, it is a pseudo language spoken by English-speaking people, and adored by children.", 
+        [TestCase(
+            "Pig Latin is not really a proper language, it is a pseudo language spoken by English-speaking people, and adored by children.", 
             ExpectedResult = "Igpay Atinlay isyay otnay eallyray ayay operpray anguagelay, ityay isyay ayay eudopsay anguagelay okenspay byay Englishyay-eakingspay eoplepay, andyay adoredyay byay ildrenchay.")]
         public string TranslateToPigLatin_WithAWholePhrase(string phrase)
         {
