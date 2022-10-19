@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+using System.Globalization;
+using System.Text;
 
 namespace LanguageGame
 {
@@ -20,11 +22,114 @@ namespace LanguageGame
         /// "Eat" -> "Eatyay"
         /// "explain" -> "explainyay"
         /// "Smile" -> "Ilesmay"
-        /// "Glove" -> "Oveglay"
+        /// "Glove" -> "Oveglay".
         /// </example>
         public static string TranslateToPigLatin(string phrase)
         {
-            throw new NotImplementedException("You need to implement this method.");
+            if (string.IsNullOrWhiteSpace(phrase))
+            {
+                throw new ArgumentException("Source string cannot be null or empty or whitespace.", nameof(phrase));
+            }
+
+            var result = new StringBuilder();
+            string[] wordsArr = phrase.Split(' ');
+            for (int i = 0; i < wordsArr.Length; i++)
+            {
+                if (i == 0)
+                {
+                    result.Append(WordToPigLatin(wordsArr[i]));
+                }
+                else
+                {
+                    result.Append(' ' + WordToPigLatin(wordsArr[i]));
+                }
+            }
+
+            return result.ToString();
         }
+
+        private static string WordToPigLatin(string phrase)
+        {
+            if (string.IsNullOrWhiteSpace(phrase))
+            {
+                return string.Empty;
+            }
+
+            if (!char.IsLetter(phrase[0]))
+            {
+                return phrase;
+            }
+
+            if (phrase.IndexOf('-') != -1)
+            {
+                var recursion = new StringBuilder();
+                string[] recursionArr = phrase.Split('-');
+                foreach (string str in recursionArr)
+                {
+                    recursion.Append(WordToPigLatin(str) + '-');
+                }
+
+                return recursion.ToString().Remove(recursion.Length - 1);
+            }
+
+            int removeCheker = 0;
+            char lustSymbol = '#';
+            if (!char.IsLetter(phrase[phrase.Length - 1]))
+            {
+                removeCheker++;
+                lustSymbol = phrase[phrase.Length - 1];
+                phrase = phrase.Remove(phrase.Length - 1);
+            }
+
+            int firstLetter = (int)phrase[0];
+            var result = new StringBuilder();
+            int caunter = 0;
+
+            if (IsVowel((char)firstLetter))
+            {
+                result.Append(phrase + "yay");
+            }
+            else if (firstLetter < 91 & firstLetter > 64)
+            {
+                while (!IsVowel(phrase[caunter]))
+                {
+                    caunter++;
+                }
+
+                result.Append(char.ToUpper(phrase[caunter], CultureInfo.InvariantCulture) + phrase.Substring(caunter + 1) + phrase.Substring(0, caunter).ToLowerInvariant() + "ay");
+            }
+            else
+            {
+                caunter = 0;
+                while (!IsVowel(phrase[caunter]) & caunter < (phrase.Length - 1))
+                {
+                    caunter++;
+                }
+
+                result.Append(phrase.Substring(caunter) + phrase.Substring(0, caunter) + "ay");
+            }
+
+            if (removeCheker == 1)
+            {
+                return result.Append(lustSymbol).ToString();
+            }
+
+            return result.ToString();
+        }
+
+        private static bool IsVowel(char letter) => letter switch
+        {
+            'A' => true,
+            'a' => true,
+            'E' => true,
+            'e' => true,
+            'I' => true,
+            'i' => true,
+            'O' => true,
+            'o' => true,
+            'U' => true,
+            'u' => true,
+            _ => false,
+        };
     }
 }
